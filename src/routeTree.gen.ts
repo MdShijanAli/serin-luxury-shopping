@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ShowroomRouteImport } from './routes/showroom'
 import { Route as PhotoBarRouteImport } from './routes/photo-bar'
 import { Route as HeritageRouteImport } from './routes/heritage'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ShowroomRoute = ShowroomRouteImport.update({
+  id: '/showroom',
+  path: '/showroom',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PhotoBarRoute = PhotoBarRouteImport.update({
   id: '/photo-bar',
   path: '/photo-bar',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/heritage': typeof HeritageRoute
   '/photo-bar': typeof PhotoBarRoute
+  '/showroom': typeof ShowroomRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/heritage': typeof HeritageRoute
   '/photo-bar': typeof PhotoBarRoute
+  '/showroom': typeof ShowroomRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/heritage': typeof HeritageRoute
   '/photo-bar': typeof PhotoBarRoute
+  '/showroom': typeof ShowroomRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/heritage' | '/photo-bar'
+  fullPaths: '/' | '/heritage' | '/photo-bar' | '/showroom'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/heritage' | '/photo-bar'
-  id: '__root__' | '/' | '/heritage' | '/photo-bar'
+  to: '/' | '/heritage' | '/photo-bar' | '/showroom'
+  id: '__root__' | '/' | '/heritage' | '/photo-bar' | '/showroom'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HeritageRoute: typeof HeritageRoute
   PhotoBarRoute: typeof PhotoBarRoute
+  ShowroomRoute: typeof ShowroomRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/showroom': {
+      id: '/showroom'
+      path: '/showroom'
+      fullPath: '/showroom'
+      preLoaderRoute: typeof ShowroomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/photo-bar': {
       id: '/photo-bar'
       path: '/photo-bar'
@@ -89,7 +106,18 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HeritageRoute: HeritageRoute,
   PhotoBarRoute: PhotoBarRoute,
+  ShowroomRoute: ShowroomRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
