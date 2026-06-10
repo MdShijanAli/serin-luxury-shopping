@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ShowroomRouteImport } from './routes/showroom'
 import { Route as PhotoBarRouteImport } from './routes/photo-bar'
 import { Route as HeritageRouteImport } from './routes/heritage'
+import { Route as CustomCollectionRouteImport } from './routes/custom-collection'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -30,6 +31,11 @@ const HeritageRoute = HeritageRouteImport.update({
   path: '/heritage',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CustomCollectionRoute = CustomCollectionRouteImport.update({
+  id: '/custom-collection',
+  path: '/custom-collection',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -44,6 +50,7 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/custom-collection': typeof CustomCollectionRoute
   '/heritage': typeof HeritageRoute
   '/photo-bar': typeof PhotoBarRoute
   '/showroom': typeof ShowroomRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/custom-collection': typeof CustomCollectionRoute
   '/heritage': typeof HeritageRoute
   '/photo-bar': typeof PhotoBarRoute
   '/showroom': typeof ShowroomRoute
@@ -59,21 +67,42 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/custom-collection': typeof CustomCollectionRoute
   '/heritage': typeof HeritageRoute
   '/photo-bar': typeof PhotoBarRoute
   '/showroom': typeof ShowroomRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/heritage' | '/photo-bar' | '/showroom'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/custom-collection'
+    | '/heritage'
+    | '/photo-bar'
+    | '/showroom'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/heritage' | '/photo-bar' | '/showroom'
-  id: '__root__' | '/' | '/about' | '/heritage' | '/photo-bar' | '/showroom'
+  to:
+    | '/'
+    | '/about'
+    | '/custom-collection'
+    | '/heritage'
+    | '/photo-bar'
+    | '/showroom'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/custom-collection'
+    | '/heritage'
+    | '/photo-bar'
+    | '/showroom'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  CustomCollectionRoute: typeof CustomCollectionRoute
   HeritageRoute: typeof HeritageRoute
   PhotoBarRoute: typeof PhotoBarRoute
   ShowroomRoute: typeof ShowroomRoute
@@ -102,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HeritageRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/custom-collection': {
+      id: '/custom-collection'
+      path: '/custom-collection'
+      fullPath: '/custom-collection'
+      preLoaderRoute: typeof CustomCollectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -122,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  CustomCollectionRoute: CustomCollectionRoute,
   HeritageRoute: HeritageRoute,
   PhotoBarRoute: PhotoBarRoute,
   ShowroomRoute: ShowroomRoute,
