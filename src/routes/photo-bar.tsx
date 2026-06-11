@@ -1,7 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
-import { ArrowRight, Image as ImageIcon, MessageSquare, Hammer, Package, Truck, Lock, Gift, Users, Baby, Award } from "lucide-react";
+import { ArrowRight, Image as ImageIcon, MessageSquare, Hammer, Package, Truck, Lock, Gift, Users, Baby, Award, Diamond, Heart, Trees, Cloud, ShieldCheck, CreditCard } from "lucide-react";
+import pb01 from "@/assets/pb-section-01.jpg";
+import pb02 from "@/assets/pb-section-02.jpg";
+import pb03 from "@/assets/pb-section-03.jpg";
+import pb04 from "@/assets/pb-section-04.jpg";
 import heroImg from "@/assets/photobar-hero.jpg";
 import detailsImg from "@/assets/photobar-details.jpg";
 import packagingImg from "@/assets/photobar-packaging.jpg";
