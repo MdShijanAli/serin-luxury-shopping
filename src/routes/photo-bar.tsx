@@ -51,6 +51,7 @@ function PhotoBarPage() {
         <Sizes />
         <Details />
         <GiftSection />
+        <ProductDetails />
       </main>
       <Footer />
     </div>
