@@ -286,3 +286,114 @@ function GiftSection() {
     </>
   );
 }
+
+/* ---------------- PRODUCT DETAILS (4 sections) ---------------- */
+function ProductDetails() {
+  const rows = [
+    {
+      num: "01",
+      title: "앞면: 당신의 추억",
+      desc: "사진이 가진 감동을\n순은 위에 새겨 오래도록\n간직할 수 있습니다.",
+      img: pb01,
+      alt: "Engraved photo bar in jewelry box",
+      icons: [
+        { Icon: ImageIcon, label: "선명한 사진 각인", sub: "고해상도 정밀 각인" },
+        { Icon: Diamond, label: "오래도록 변치 않는 가치", sub: "" },
+        { Icon: Heart, label: "나만의 스토리", sub: "문구 각인으로 완성" },
+      ],
+    },
+    {
+      num: "02",
+      title: "뒷면: 십장생 각인",
+      desc: "모든 SERIN Photo Bar 뒷면에는\n행복과 장수를 상징하는\n한국 전통 십장생 문양이\n정교하게 각인되어 있습니다.\n\n좋은 의미를 담아,\n오래도록 간직하세요.",
+      img: pb02,
+      alt: "Sipjangsaeng engraved silver bar",
+      icons: [
+        { Icon: Award, label: "사슴", sub: "장수와 평안" },
+        { Icon: Trees, label: "소나무", sub: "생명력과 굳건함" },
+        { Icon: Cloud, label: "구름", sub: "번영과 좋은 기운" },
+      ],
+    },
+    {
+      num: "03",
+      title: "품질 보증",
+      desc: "SERIN Photo Bar는\n순은 999 정품입니다.\n품질보증서와 함께\n신뢰할 수 있는 가치를 보장합니다.",
+      img: pb03,
+      alt: "Certificate of authenticity",
+      icons: [
+        { Icon: ShieldCheck, label: "LAMBDA", sub: "순은 999 공식 인증 마크" },
+        { Icon: Award, label: "HALLMARK", sub: "한국 귀금속 품질 보증 마크" },
+      ],
+    },
+    {
+      num: "04",
+      title: "선물을 위한 완성",
+      desc: "고급 패키지에 담아\n진심이 전해질 수 있도록\n정성껏 준비했습니다.",
+      img: pb04,
+      alt: "Luxury gift packaging",
+      icons: [
+        { Icon: Gift, label: "고급 패키지", sub: "" },
+        { Icon: ShieldCheck, label: "안전한 포장", sub: "" },
+        { Icon: CreditCard, label: "메시지 카드 제공", sub: "" },
+      ],
+      note: "* 패키지 구성은 변경될 수 있습니다.",
+    },
+  ];
+
+  return (
+    <section className="bg-[#f5f1ea]">
+      {rows.map((r, idx) => (
+        <div
+          key={r.num}
+          className={`border-t border-[#e6dfd4] ${idx % 2 === 1 ? "bg-[#efe9df]" : "bg-[#f5f1ea]"}`}
+        >
+          <div className="max-w-[1200px] mx-auto px-6 md:px-10 py-20 md:py-28 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
+            <div className="order-2 md:order-1">
+              <div className="text-[13px] tracking-[0.3em] text-[#8a7f72] mb-6">
+                {r.num}
+                <div className="w-8 h-px bg-[#8a7f72] mt-2" />
+              </div>
+              <h3 className="font-serif text-3xl md:text-4xl text-[#1a1410] mb-6 tracking-tight">
+                {r.title}
+              </h3>
+              <p className="text-[15px] leading-[1.9] text-[#5a5048] whitespace-pre-line mb-10">
+                {r.desc}
+              </p>
+              <div className="flex flex-wrap gap-x-10 gap-y-6">
+                {r.icons.map(({ Icon, label, sub }) => (
+                  <div key={label} className="flex flex-col items-center text-center min-w-[80px]">
+                    <Icon className="w-7 h-7 text-[#1a1410] mb-3" strokeWidth={1.2} />
+                    <div className="text-[12px] font-semibold tracking-wide text-[#1a1410]">{label}</div>
+                    {sub && <div className="text-[11px] text-[#8a7f72] mt-1">{sub}</div>}
+                  </div>
+                ))}
+              </div>
+              {r.note && (
+                <p className="text-[11px] text-[#8a7f72] mt-8">{r.note}</p>
+              )}
+            </div>
+            <div className="order-1 md:order-2">
+              <img
+                src={r.img}
+                alt={r.alt}
+                loading="lazy"
+                className="w-full h-auto object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      ))}
+      <div className="bg-[#1a1410] py-10">
+        <div className="max-w-[1200px] mx-auto px-6 md:px-10 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
+          <p className="font-serif text-xl md:text-2xl text-[#efe9df] tracking-wide">
+            당신의 순간을, 지금 바로 시작하세요.
+          </p>
+          <button className="group inline-flex items-center gap-3 bg-[#2a221c] border border-[#3d342c] text-[#efe9df] px-7 py-3.5 text-[12px] tracking-[0.28em] hover:bg-[#3d342c] transition">
+            나만의 포토바 만들기
+            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
