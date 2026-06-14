@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ShowroomRouteImport } from './routes/showroom'
 import { Route as PhotoBarRouteImport } from './routes/photo-bar'
 import { Route as OrderDetailsRouteImport } from './routes/order-details'
+import { Route as MyPageRouteImport } from './routes/my-page'
 import { Route as HeritageRouteImport } from './routes/heritage'
 import { Route as CustomizeYourStoryRouteImport } from './routes/customize-your-story'
 import { Route as CustomCollectionRouteImport } from './routes/custom-collection'
@@ -31,6 +32,11 @@ const PhotoBarRoute = PhotoBarRouteImport.update({
 const OrderDetailsRoute = OrderDetailsRouteImport.update({
   id: '/order-details',
   path: '/order-details',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyPageRoute = MyPageRouteImport.update({
+  id: '/my-page',
+  path: '/my-page',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HeritageRoute = HeritageRouteImport.update({
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
   '/heritage': typeof HeritageRoute
+  '/my-page': typeof MyPageRoute
   '/order-details': typeof OrderDetailsRoute
   '/photo-bar': typeof PhotoBarRoute
   '/showroom': typeof ShowroomRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
   '/heritage': typeof HeritageRoute
+  '/my-page': typeof MyPageRoute
   '/order-details': typeof OrderDetailsRoute
   '/photo-bar': typeof PhotoBarRoute
   '/showroom': typeof ShowroomRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
   '/heritage': typeof HeritageRoute
+  '/my-page': typeof MyPageRoute
   '/order-details': typeof OrderDetailsRoute
   '/photo-bar': typeof PhotoBarRoute
   '/showroom': typeof ShowroomRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/custom-collection'
     | '/customize-your-story'
     | '/heritage'
+    | '/my-page'
     | '/order-details'
     | '/photo-bar'
     | '/showroom'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/custom-collection'
     | '/customize-your-story'
     | '/heritage'
+    | '/my-page'
     | '/order-details'
     | '/photo-bar'
     | '/showroom'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/custom-collection'
     | '/customize-your-story'
     | '/heritage'
+    | '/my-page'
     | '/order-details'
     | '/photo-bar'
     | '/showroom'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   CustomCollectionRoute: typeof CustomCollectionRoute
   CustomizeYourStoryRoute: typeof CustomizeYourStoryRoute
   HeritageRoute: typeof HeritageRoute
+  MyPageRoute: typeof MyPageRoute
   OrderDetailsRoute: typeof OrderDetailsRoute
   PhotoBarRoute: typeof PhotoBarRoute
   ShowroomRoute: typeof ShowroomRoute
@@ -155,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/order-details'
       fullPath: '/order-details'
       preLoaderRoute: typeof OrderDetailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-page': {
+      id: '/my-page'
+      path: '/my-page'
+      fullPath: '/my-page'
+      preLoaderRoute: typeof MyPageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/heritage': {
@@ -201,6 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   CustomCollectionRoute: CustomCollectionRoute,
   CustomizeYourStoryRoute: CustomizeYourStoryRoute,
   HeritageRoute: HeritageRoute,
+  MyPageRoute: MyPageRoute,
   OrderDetailsRoute: OrderDetailsRoute,
   PhotoBarRoute: PhotoBarRoute,
   ShowroomRoute: ShowroomRoute,
