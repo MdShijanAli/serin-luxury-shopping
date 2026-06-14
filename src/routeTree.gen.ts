@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ShowroomRouteImport } from './routes/showroom'
 import { Route as PhotoBarRouteImport } from './routes/photo-bar'
+import { Route as OrderDetailsRouteImport } from './routes/order-details'
 import { Route as HeritageRouteImport } from './routes/heritage'
 import { Route as CustomizeYourStoryRouteImport } from './routes/customize-your-story'
 import { Route as CustomCollectionRouteImport } from './routes/custom-collection'
@@ -25,6 +26,11 @@ const ShowroomRoute = ShowroomRouteImport.update({
 const PhotoBarRoute = PhotoBarRouteImport.update({
   id: '/photo-bar',
   path: '/photo-bar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderDetailsRoute = OrderDetailsRouteImport.update({
+  id: '/order-details',
+  path: '/order-details',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HeritageRoute = HeritageRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
   '/heritage': typeof HeritageRoute
+  '/order-details': typeof OrderDetailsRoute
   '/photo-bar': typeof PhotoBarRoute
   '/showroom': typeof ShowroomRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
   '/heritage': typeof HeritageRoute
+  '/order-details': typeof OrderDetailsRoute
   '/photo-bar': typeof PhotoBarRoute
   '/showroom': typeof ShowroomRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
   '/heritage': typeof HeritageRoute
+  '/order-details': typeof OrderDetailsRoute
   '/photo-bar': typeof PhotoBarRoute
   '/showroom': typeof ShowroomRoute
 }
@@ -89,6 +98,7 @@ export interface FileRouteTypes {
     | '/custom-collection'
     | '/customize-your-story'
     | '/heritage'
+    | '/order-details'
     | '/photo-bar'
     | '/showroom'
   fileRoutesByTo: FileRoutesByTo
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/custom-collection'
     | '/customize-your-story'
     | '/heritage'
+    | '/order-details'
     | '/photo-bar'
     | '/showroom'
   id:
@@ -107,6 +118,7 @@ export interface FileRouteTypes {
     | '/custom-collection'
     | '/customize-your-story'
     | '/heritage'
+    | '/order-details'
     | '/photo-bar'
     | '/showroom'
   fileRoutesById: FileRoutesById
@@ -117,6 +129,7 @@ export interface RootRouteChildren {
   CustomCollectionRoute: typeof CustomCollectionRoute
   CustomizeYourStoryRoute: typeof CustomizeYourStoryRoute
   HeritageRoute: typeof HeritageRoute
+  OrderDetailsRoute: typeof OrderDetailsRoute
   PhotoBarRoute: typeof PhotoBarRoute
   ShowroomRoute: typeof ShowroomRoute
 }
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/photo-bar'
       fullPath: '/photo-bar'
       preLoaderRoute: typeof PhotoBarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order-details': {
+      id: '/order-details'
+      path: '/order-details'
+      fullPath: '/order-details'
+      preLoaderRoute: typeof OrderDetailsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/heritage': {
@@ -181,9 +201,20 @@ const rootRouteChildren: RootRouteChildren = {
   CustomCollectionRoute: CustomCollectionRoute,
   CustomizeYourStoryRoute: CustomizeYourStoryRoute,
   HeritageRoute: HeritageRoute,
+  OrderDetailsRoute: OrderDetailsRoute,
   PhotoBarRoute: PhotoBarRoute,
   ShowroomRoute: ShowroomRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
