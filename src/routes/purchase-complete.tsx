@@ -127,6 +127,15 @@ function Info({ k, v, big }: { k: string; v: string; big?: boolean }) {
     </div>
   );
 }
+function Step({ icon, n, d }: { icon: React.ReactNode; n: string; d: string }) {
+  return (
+    <div className="flex flex-col items-center text-center">
+      <div className="text-[#1a1410]">{icon}</div>
+      <p className="mt-4 text-sm font-medium">{n}</p>
+      <p className="mt-2 text-xs text-foreground/60 leading-relaxed">{d}</p>
+    </div>
+  );
+}
 function Row({ k, v }: { k: string; v: string }) {
   return <div className="flex justify-between py-1.5 text-sm"><span className="text-foreground/60">{k}</span><span>{v}</span></div>;
 }
