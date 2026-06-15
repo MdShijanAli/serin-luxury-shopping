@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ShowroomRouteImport } from './routes/showroom'
+import { Route as PurchaseCompleteRouteImport } from './routes/purchase-complete'
 import { Route as PhotoBarRouteImport } from './routes/photo-bar'
 import { Route as OrderDetailsRouteImport } from './routes/order-details'
 import { Route as MyPageRouteImport } from './routes/my-page'
@@ -17,12 +18,20 @@ import { Route as HeritageRouteImport } from './routes/heritage'
 import { Route as CustomizeYourStoryRouteImport } from './routes/customize-your-story'
 import { Route as CustomCollectionRouteImport } from './routes/custom-collection'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CheckoutShowroomRouteImport } from './routes/checkout-showroom'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as CartRouteImport } from './routes/cart'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
 const ShowroomRoute = ShowroomRouteImport.update({
   id: '/showroom',
   path: '/showroom',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PurchaseCompleteRoute = PurchaseCompleteRouteImport.update({
+  id: '/purchase-complete',
+  path: '/purchase-complete',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PhotoBarRoute = PhotoBarRouteImport.update({
@@ -60,6 +69,21 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutShowroomRoute = CheckoutShowroomRouteImport.update({
+  id: '/checkout-showroom',
+  path: '/checkout-showroom',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -74,6 +98,9 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/checkout-showroom': typeof CheckoutShowroomRoute
   '/contact': typeof ContactRoute
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
@@ -81,11 +108,15 @@ export interface FileRoutesByFullPath {
   '/my-page': typeof MyPageRoute
   '/order-details': typeof OrderDetailsRoute
   '/photo-bar': typeof PhotoBarRoute
+  '/purchase-complete': typeof PurchaseCompleteRoute
   '/showroom': typeof ShowroomRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/checkout-showroom': typeof CheckoutShowroomRoute
   '/contact': typeof ContactRoute
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
@@ -93,12 +124,16 @@ export interface FileRoutesByTo {
   '/my-page': typeof MyPageRoute
   '/order-details': typeof OrderDetailsRoute
   '/photo-bar': typeof PhotoBarRoute
+  '/purchase-complete': typeof PurchaseCompleteRoute
   '/showroom': typeof ShowroomRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/checkout-showroom': typeof CheckoutShowroomRoute
   '/contact': typeof ContactRoute
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
@@ -106,6 +141,7 @@ export interface FileRoutesById {
   '/my-page': typeof MyPageRoute
   '/order-details': typeof OrderDetailsRoute
   '/photo-bar': typeof PhotoBarRoute
+  '/purchase-complete': typeof PurchaseCompleteRoute
   '/showroom': typeof ShowroomRoute
 }
 export interface FileRouteTypes {
@@ -113,6 +149,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/cart'
+    | '/checkout'
+    | '/checkout-showroom'
     | '/contact'
     | '/custom-collection'
     | '/customize-your-story'
@@ -120,11 +159,15 @@ export interface FileRouteTypes {
     | '/my-page'
     | '/order-details'
     | '/photo-bar'
+    | '/purchase-complete'
     | '/showroom'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/cart'
+    | '/checkout'
+    | '/checkout-showroom'
     | '/contact'
     | '/custom-collection'
     | '/customize-your-story'
@@ -132,11 +175,15 @@ export interface FileRouteTypes {
     | '/my-page'
     | '/order-details'
     | '/photo-bar'
+    | '/purchase-complete'
     | '/showroom'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/cart'
+    | '/checkout'
+    | '/checkout-showroom'
     | '/contact'
     | '/custom-collection'
     | '/customize-your-story'
@@ -144,12 +191,16 @@ export interface FileRouteTypes {
     | '/my-page'
     | '/order-details'
     | '/photo-bar'
+    | '/purchase-complete'
     | '/showroom'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  CartRoute: typeof CartRoute
+  CheckoutRoute: typeof CheckoutRoute
+  CheckoutShowroomRoute: typeof CheckoutShowroomRoute
   ContactRoute: typeof ContactRoute
   CustomCollectionRoute: typeof CustomCollectionRoute
   CustomizeYourStoryRoute: typeof CustomizeYourStoryRoute
@@ -157,6 +208,7 @@ export interface RootRouteChildren {
   MyPageRoute: typeof MyPageRoute
   OrderDetailsRoute: typeof OrderDetailsRoute
   PhotoBarRoute: typeof PhotoBarRoute
+  PurchaseCompleteRoute: typeof PurchaseCompleteRoute
   ShowroomRoute: typeof ShowroomRoute
 }
 
@@ -167,6 +219,13 @@ declare module '@tanstack/react-router' {
       path: '/showroom'
       fullPath: '/showroom'
       preLoaderRoute: typeof ShowroomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/purchase-complete': {
+      id: '/purchase-complete'
+      path: '/purchase-complete'
+      fullPath: '/purchase-complete'
+      preLoaderRoute: typeof PurchaseCompleteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/photo-bar': {
@@ -218,6 +277,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout-showroom': {
+      id: '/checkout-showroom'
+      path: '/checkout-showroom'
+      fullPath: '/checkout-showroom'
+      preLoaderRoute: typeof CheckoutShowroomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -238,6 +318,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  CartRoute: CartRoute,
+  CheckoutRoute: CheckoutRoute,
+  CheckoutShowroomRoute: CheckoutShowroomRoute,
   ContactRoute: ContactRoute,
   CustomCollectionRoute: CustomCollectionRoute,
   CustomizeYourStoryRoute: CustomizeYourStoryRoute,
@@ -245,6 +328,7 @@ const rootRouteChildren: RootRouteChildren = {
   MyPageRoute: MyPageRoute,
   OrderDetailsRoute: OrderDetailsRoute,
   PhotoBarRoute: PhotoBarRoute,
+  PurchaseCompleteRoute: PurchaseCompleteRoute,
   ShowroomRoute: ShowroomRoute,
 }
 export const routeTree = rootRouteImport
