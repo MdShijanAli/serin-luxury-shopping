@@ -15,6 +15,7 @@ import { Route as PhotoBarRouteImport } from './routes/photo-bar'
 import { Route as OrderDetailsRouteImport } from './routes/order-details'
 import { Route as MyPageRouteImport } from './routes/my-page'
 import { Route as HeritageRouteImport } from './routes/heritage'
+import { Route as GoldSilverTradingRouteImport } from './routes/gold-silver-trading'
 import { Route as CustomizeYourStoryRouteImport } from './routes/customize-your-story'
 import { Route as CustomCollectionRouteImport } from './routes/custom-collection'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -52,6 +53,11 @@ const MyPageRoute = MyPageRouteImport.update({
 const HeritageRoute = HeritageRouteImport.update({
   id: '/heritage',
   path: '/heritage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoldSilverTradingRoute = GoldSilverTradingRouteImport.update({
+  id: '/gold-silver-trading',
+  path: '/gold-silver-trading',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CustomizeYourStoryRoute = CustomizeYourStoryRouteImport.update({
@@ -104,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
+  '/gold-silver-trading': typeof GoldSilverTradingRoute
   '/heritage': typeof HeritageRoute
   '/my-page': typeof MyPageRoute
   '/order-details': typeof OrderDetailsRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
+  '/gold-silver-trading': typeof GoldSilverTradingRoute
   '/heritage': typeof HeritageRoute
   '/my-page': typeof MyPageRoute
   '/order-details': typeof OrderDetailsRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
+  '/gold-silver-trading': typeof GoldSilverTradingRoute
   '/heritage': typeof HeritageRoute
   '/my-page': typeof MyPageRoute
   '/order-details': typeof OrderDetailsRoute
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/custom-collection'
     | '/customize-your-story'
+    | '/gold-silver-trading'
     | '/heritage'
     | '/my-page'
     | '/order-details'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/custom-collection'
     | '/customize-your-story'
+    | '/gold-silver-trading'
     | '/heritage'
     | '/my-page'
     | '/order-details'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/custom-collection'
     | '/customize-your-story'
+    | '/gold-silver-trading'
     | '/heritage'
     | '/my-page'
     | '/order-details'
@@ -204,6 +216,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   CustomCollectionRoute: typeof CustomCollectionRoute
   CustomizeYourStoryRoute: typeof CustomizeYourStoryRoute
+  GoldSilverTradingRoute: typeof GoldSilverTradingRoute
   HeritageRoute: typeof HeritageRoute
   MyPageRoute: typeof MyPageRoute
   OrderDetailsRoute: typeof OrderDetailsRoute
@@ -254,6 +267,13 @@ declare module '@tanstack/react-router' {
       path: '/heritage'
       fullPath: '/heritage'
       preLoaderRoute: typeof HeritageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gold-silver-trading': {
+      id: '/gold-silver-trading'
+      path: '/gold-silver-trading'
+      fullPath: '/gold-silver-trading'
+      preLoaderRoute: typeof GoldSilverTradingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/customize-your-story': {
@@ -324,6 +344,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   CustomCollectionRoute: CustomCollectionRoute,
   CustomizeYourStoryRoute: CustomizeYourStoryRoute,
+  GoldSilverTradingRoute: GoldSilverTradingRoute,
   HeritageRoute: HeritageRoute,
   MyPageRoute: MyPageRoute,
   OrderDetailsRoute: OrderDetailsRoute,
