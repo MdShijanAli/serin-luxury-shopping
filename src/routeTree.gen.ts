@@ -27,9 +27,12 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminProfileRouteImport } from './routes/admin.profile'
 import { Route as AdminProductsRouteImport } from './routes/admin.products'
+import { Route as AdminPreferencesRouteImport } from './routes/admin.preferences'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
+import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
 
 const ShowroomRoute = ShowroomRouteImport.update({
@@ -122,9 +125,19 @@ const AdminSettingsRoute = AdminSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminProfileRoute = AdminProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminProductsRoute = AdminProductsRouteImport.update({
   id: '/products',
   path: '/products',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPreferencesRoute = AdminPreferencesRouteImport.update({
+  id: '/preferences',
+  path: '/preferences',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminOrdersRoute = AdminOrdersRouteImport.update({
@@ -135,6 +148,11 @@ const AdminOrdersRoute = AdminOrdersRouteImport.update({
 const AdminCustomersRoute = AdminCustomersRouteImport.update({
   id: '/customers',
   path: '/customers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminActivityRoute = AdminActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminAccountsRoute = AdminAccountsRouteImport.update({
@@ -161,9 +179,12 @@ export interface FileRoutesByFullPath {
   '/purchase-complete': typeof PurchaseCompleteRoute
   '/showroom': typeof ShowroomRoute
   '/admin/accounts': typeof AdminAccountsRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/preferences': typeof AdminPreferencesRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/profile': typeof AdminProfileRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -184,9 +205,12 @@ export interface FileRoutesByTo {
   '/purchase-complete': typeof PurchaseCompleteRoute
   '/showroom': typeof ShowroomRoute
   '/admin/accounts': typeof AdminAccountsRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/preferences': typeof AdminPreferencesRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/profile': typeof AdminProfileRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin': typeof AdminIndexRoute
 }
@@ -209,9 +233,12 @@ export interface FileRoutesById {
   '/purchase-complete': typeof PurchaseCompleteRoute
   '/showroom': typeof ShowroomRoute
   '/admin/accounts': typeof AdminAccountsRoute
+  '/admin/activity': typeof AdminActivityRoute
   '/admin/customers': typeof AdminCustomersRoute
   '/admin/orders': typeof AdminOrdersRoute
+  '/admin/preferences': typeof AdminPreferencesRoute
   '/admin/products': typeof AdminProductsRoute
+  '/admin/profile': typeof AdminProfileRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/': typeof AdminIndexRoute
 }
@@ -235,9 +262,12 @@ export interface FileRouteTypes {
     | '/purchase-complete'
     | '/showroom'
     | '/admin/accounts'
+    | '/admin/activity'
     | '/admin/customers'
     | '/admin/orders'
+    | '/admin/preferences'
     | '/admin/products'
+    | '/admin/profile'
     | '/admin/settings'
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
@@ -258,9 +288,12 @@ export interface FileRouteTypes {
     | '/purchase-complete'
     | '/showroom'
     | '/admin/accounts'
+    | '/admin/activity'
     | '/admin/customers'
     | '/admin/orders'
+    | '/admin/preferences'
     | '/admin/products'
+    | '/admin/profile'
     | '/admin/settings'
     | '/admin'
   id:
@@ -282,9 +315,12 @@ export interface FileRouteTypes {
     | '/purchase-complete'
     | '/showroom'
     | '/admin/accounts'
+    | '/admin/activity'
     | '/admin/customers'
     | '/admin/orders'
+    | '/admin/preferences'
     | '/admin/products'
+    | '/admin/profile'
     | '/admin/settings'
     | '/admin/'
   fileRoutesById: FileRoutesById
@@ -436,11 +472,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSettingsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/profile': {
+      id: '/admin/profile'
+      path: '/profile'
+      fullPath: '/admin/profile'
+      preLoaderRoute: typeof AdminProfileRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/products': {
       id: '/admin/products'
       path: '/products'
       fullPath: '/admin/products'
       preLoaderRoute: typeof AdminProductsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/preferences': {
+      id: '/admin/preferences'
+      path: '/preferences'
+      fullPath: '/admin/preferences'
+      preLoaderRoute: typeof AdminPreferencesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/orders': {
@@ -457,6 +507,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCustomersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/activity': {
+      id: '/admin/activity'
+      path: '/activity'
+      fullPath: '/admin/activity'
+      preLoaderRoute: typeof AdminActivityRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/accounts': {
       id: '/admin/accounts'
       path: '/accounts'
@@ -469,18 +526,24 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminAccountsRoute: typeof AdminAccountsRoute
+  AdminActivityRoute: typeof AdminActivityRoute
   AdminCustomersRoute: typeof AdminCustomersRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
+  AdminPreferencesRoute: typeof AdminPreferencesRoute
   AdminProductsRoute: typeof AdminProductsRoute
+  AdminProfileRoute: typeof AdminProfileRoute
   AdminSettingsRoute: typeof AdminSettingsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAccountsRoute: AdminAccountsRoute,
+  AdminActivityRoute: AdminActivityRoute,
   AdminCustomersRoute: AdminCustomersRoute,
   AdminOrdersRoute: AdminOrdersRoute,
+  AdminPreferencesRoute: AdminPreferencesRoute,
   AdminProductsRoute: AdminProductsRoute,
+  AdminProfileRoute: AdminProfileRoute,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
