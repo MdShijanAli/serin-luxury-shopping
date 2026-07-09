@@ -57,7 +57,7 @@ export function AdminSidebar() {
       />
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex flex-col bg-[#0b0b0d] text-white transition-[width,transform] duration-300 ease-out
+        className={`fixed inset-y-0 left-0 z-50 flex flex-col overflow-x-hidden bg-[#0b0b0d] text-white transition-[width,transform] duration-300 ease-out
           w-[260px] ${width}
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0`}
       >
