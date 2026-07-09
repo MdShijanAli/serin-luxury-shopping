@@ -25,7 +25,7 @@ function AdminLayout() {
 function Shell() {
   const { collapsed } = useAdminSidebar();
   return (
-    <div className="min-h-screen bg-[#f4f2ee] font-sans text-[#1a1410]">
+    <div className="min-h-screen overflow-x-hidden bg-[#f4f2ee] font-sans text-[#1a1410]">
       <AdminSidebar />
       <div
         className={`min-h-screen transition-[padding] duration-300 ease-out ${
@@ -33,7 +33,7 @@ function Shell() {
         }`}
       >
         <AdminTopbar />
-        <main className="px-5 pb-16 pt-6 lg:px-8">
+        <main className="min-w-0 px-5 pb-16 pt-6 lg:px-8">
           <Outlet />
         </main>
       </div>
