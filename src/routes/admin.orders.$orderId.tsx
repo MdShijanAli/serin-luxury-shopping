@@ -239,7 +239,7 @@ function OrderDetailPage() {
                 </tr>
                 <tr>
                   <td colSpan={3} className="px-5 py-2.5 text-right text-[12px] text-black/55">Shipping</td>
-                  <td className="px-5 py-2.5 text-right tabular-nums">{shipping ? `₩ ${shipping.toLocaleString()}` : "Free"}</td>
+                  <td className="px-5 py-2.5 text-right tabular-nums">{shippingFee ? `₩ ${shippingFee.toLocaleString()}` : "Free"}</td>
                 </tr>
                 <tr className="border-t border-black/[0.06]">
                   <td colSpan={3} className="px-5 py-3.5 text-right text-[12.5px] font-medium">Total</td>
