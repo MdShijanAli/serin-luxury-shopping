@@ -180,11 +180,20 @@ function OrderDetailPage() {
               <Row k="Email" v="serin_kim@example.com" />
               <Row k="Requests" v="문구는 깔끔하게 부탁드립니다." />
             </Card>
-            <Card icon={MapPin} title="Shipping">
-              <Row k="Address" v="서울 강남구 청담동 · 123-45" />
-              <Row k="Recipient" v="김서린 · 010-1234-5678" />
-              <Row k="Carrier" v="CJ Logistics" />
-              <Row k="Tracking" v="Not yet assigned" />
+            <Card
+              icon={MapPin}
+              title="Shipping"
+              action={
+                <button onClick={() => setShipEdit(true)} className="flex items-center gap-1 rounded-lg border border-black/[0.08] bg-white px-2 py-1 text-[11px] font-medium hover:bg-black/[0.03]">
+                  <Pencil className="h-3 w-3" /> Update
+                </button>
+              }
+            >
+              <Row k="Address" v={shipping.address} />
+              <Row k="Recipient" v={`${shipping.recipient} · ${shipping.phone}`} />
+              <Row k="Carrier" v={shipping.carrier} />
+              <Row k="Tracking" v={shipping.tracking || "Not yet assigned"} />
+              {shipping.eta && <Row k="ETA" v={shipping.eta} />}
             </Card>
           </div>
 
