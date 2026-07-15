@@ -330,14 +330,17 @@ function OrderDetailPage() {
   );
 }
 
-function Card({ icon: Icon, title, children }: { icon: React.ComponentType<{ className?: string }>; title: string; children: React.ReactNode }) {
+function Card({ icon: Icon, title, action, children }: { icon: React.ComponentType<{ className?: string }>; title: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
     <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
-      <div className="mb-3 flex items-center gap-2">
-        <div className="grid h-7 w-7 place-items-center rounded-lg bg-[#faf5e6] text-[#8b6f3f]">
-          <Icon className="h-3.5 w-3.5" />
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <div className="grid h-7 w-7 place-items-center rounded-lg bg-[#faf5e6] text-[#8b6f3f]">
+            <Icon className="h-3.5 w-3.5" />
+          </div>
+          <h2 className="text-[13px] font-medium tracking-wide">{title}</h2>
         </div>
-        <h2 className="text-[13px] font-medium tracking-wide">{title}</h2>
+        {action}
       </div>
       <dl className="space-y-2">{children}</dl>
     </section>
