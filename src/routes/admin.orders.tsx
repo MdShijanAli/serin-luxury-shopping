@@ -103,7 +103,9 @@ function OrdersPage() {
             <tbody>
               {filtered.map((r) => (
                 <tr key={r.id} className="border-b border-black/[0.04] transition-colors last:border-0 hover:bg-[#faf9f6]">
-                  <td className="px-5 py-4 font-medium tabular-nums">{r.id}</td>
+                  <td className="px-5 py-4 font-medium tabular-nums">
+                    <Link to="/admin/orders/$orderId" params={{ orderId: r.id }} className="hover:underline">{r.id}</Link>
+                  </td>
                   <td className="px-5 py-4 tabular-nums text-black/60">{r.date}</td>
                   <td className="px-5 py-4">{r.name}</td>
                   <td className="px-5 py-4 tabular-nums text-black/60">{r.phone}</td>
