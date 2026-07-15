@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, ChevronDown, MessageSquare, XCircle, Printer, Copy, Check, Package, CreditCard, Truck, User, MapPin, Clock } from "lucide-react";
+import { ArrowLeft, ChevronDown, MessageSquare, XCircle, Printer, Copy, Check, Package, CreditCard, Truck, User, MapPin, Clock, FileText, Receipt, Download, X, Pencil } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/admin/orders/$orderId")({
