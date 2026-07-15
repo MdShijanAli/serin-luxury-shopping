@@ -250,18 +250,21 @@ function OrderDetailPage() {
           </section>
 
           {/* Actions */}
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <button className="flex h-11 items-center justify-center gap-2 rounded-xl border border-black/[0.08] bg-white text-[12.5px] font-medium hover:bg-black/[0.03]">
               <XCircle className="h-4 w-4" /> Cancel order
             </button>
-            <button className="flex h-11 items-center justify-center gap-2 rounded-xl border border-black/[0.08] bg-white text-[12.5px] font-medium hover:bg-black/[0.03]">
+            <button onClick={() => notify("SMS sent to customer")} className="flex h-11 items-center justify-center gap-2 rounded-xl border border-black/[0.08] bg-white text-[12.5px] font-medium hover:bg-black/[0.03]">
               <MessageSquare className="h-4 w-4" /> Send SMS
+            </button>
+            <button onClick={() => setShipEdit(true)} className="flex h-11 items-center justify-center gap-2 rounded-xl border border-black/[0.08] bg-white text-[12.5px] font-medium hover:bg-black/[0.03]">
+              <Truck className="h-4 w-4" /> Update shipping
             </button>
             <button
               onClick={() => setMenuOpen(true)}
               className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#1a1410] text-[12.5px] font-medium text-white hover:bg-black"
             >
-              <Truck className="h-4 w-4" /> Change status
+              <Download className="h-4 w-4" /> Change status
             </button>
           </div>
         </div>
