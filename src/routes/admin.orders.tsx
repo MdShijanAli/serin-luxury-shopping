@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Search, Download, Filter, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react";
 import { useMemo, useState } from "react";
 
