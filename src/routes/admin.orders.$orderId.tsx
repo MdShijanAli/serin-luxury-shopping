@@ -36,15 +36,61 @@ function OrderDetailPage() {
   const [status, setStatus] = useState<Status>("Pending");
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [shipEdit, setShipEdit] = useState(false);
+  const [shipping, setShipping] = useState({
+    address: "서울 강남구 청담동 · 123-45",
+    recipient: "김서린",
+    phone: "010-1234-5678",
+    carrier: "CJ Logistics",
+    tracking: "",
+    eta: "",
+  });
+  const [toast, setToast] = useState<string | null>(null);
 
   const subtotal = items.reduce((s, i) => s + i.qty * i.price, 0);
-  const shipping: number = 0;
-  const total = subtotal + shipping;
+  const shippingFee: number = 0;
+  const total = subtotal + shippingFee;
 
   const copy = () => {
     navigator.clipboard.writeText(orderId);
     setCopied(true);
     setTimeout(() => setCopied(false), 1200);
+  };
+
+  const notify = (m: string) => {
+    setToast(m);
+    setTimeout(() => setToast(null), 2000);
+  };
+
+  const downloadDoc = (kind: "invoice" | "receipt") => {
+    const title = kind === "invoice" ? "INVOICE" : "RECEIPT";
+    const lines = [
+      `SERIN ATELIER — ${title}`,
+      `============================================`,
+      `Order #     : ${orderId}`,
+      `Date        : 2024.05.12 14:35`,
+      `Customer    : ${shipping.recipient}`,
+      `Phone       : ${shipping.phone}`,
+      `Ship to     : ${shipping.address}`,
+      ``,
+      `ITEMS`,
+      `--------------------------------------------`,
+      ...items.map((i) => `${i.name.padEnd(30)} ${String(i.qty).padStart(3)} x  ₩${i.price.toLocaleString().padStart(9)}`),
+      `--------------------------------------------`,
+      `Subtotal                             ₩${subtotal.toLocaleString().padStart(9)}`,
+      `Shipping                             ${shippingFee ? `₩${shippingFee.toLocaleString().padStart(9)}` : "     Free"}`,
+      `TOTAL                                ₩${total.toLocaleString().padStart(9)}`,
+      ``,
+      `Thank you for choosing Serin.`,
+    ].join("\n");
+    const blob = new Blob([lines], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${kind}-${orderId}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    notify(`${title.charAt(0) + title.slice(1).toLowerCase()} downloaded`);
   };
 
   return (
