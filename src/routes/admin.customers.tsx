@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/admin/customers")({
   head: () => ({ meta: [{ title: "Customers — SERIN Admin" }] }),
@@ -36,23 +36,27 @@ function CustomersPage() {
             </tr>
           </thead>
           <tbody>
-            {customers.map((c) => (
+            {customers.map((c) => {
+              const cid = c.p.replace(/\D/g, "");
+              return (
               <tr key={c.id} className="border-b border-black/[0.04] transition-colors last:border-0 hover:bg-[#faf9f6]">
                 <td className="px-5 py-4">
-                  <div className="flex items-center gap-3">
+                  <Link to="/admin/customers/$customerId" params={{ customerId: cid }} className="flex items-center gap-3 hover:underline">
                     <div className="grid h-8 w-8 place-items-center rounded-full bg-gradient-to-br from-[#1a1410] to-[#3a2a1c] text-[11px] font-medium text-white">{c.n[0]}</div>
                     <span className="font-medium">{c.n}</span>
-                  </div>
+                  </Link>
                 </td>
                 <td className="px-5 py-4 tabular-nums text-black/60">{c.p}</td>
                 <td className="px-5 py-4 text-black/60">{c.e}</td>
                 <td className="px-5 py-4 tabular-nums text-black/60">{c.d}</td>
-                <td className="px-5 py-4 tabular-nums">{c.id}</td>
+                <td className="px-5 py-4 tabular-nums">
+                  <Link to="/admin/orders/$orderId" params={{ orderId: c.id }} className="hover:underline">{c.id}</Link>
+                </td>
                 <td className="px-5 py-4 tabular-nums">{c.c}</td>
                 <td className="px-5 py-4 text-black/60">{c.i}</td>
                 <td className="px-5 py-4"><span className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-medium ring-1 ${tone[c.t]}`}>{c.s}</span></td>
               </tr>
-            ))}
+            );})}
           </tbody>
         </table>
       </section>

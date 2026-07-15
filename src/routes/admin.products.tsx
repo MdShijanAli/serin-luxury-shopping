@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Plus, Search, Pencil, Trash2, X, Eye, EyeOff } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -91,10 +91,10 @@ function ProductsPage() {
               {filtered.map((p) => (
                 <tr key={p.id} className="border-b border-black/[0.04] transition-colors last:border-0 hover:bg-[#faf9f6]">
                   <td className="px-5 py-4">
-                    <div className="flex items-center gap-3">
+                    <Link to="/admin/products/$productId" params={{ productId: p.id }} className="flex items-center gap-3 hover:underline">
                       <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-[#faf3e2] to-[#e6cf9e] ring-1 ring-[#e6cf9e]/40" />
                       <span className="font-medium">{p.n}</span>
-                    </div>
+                    </Link>
                   </td>
                   <td className="px-5 py-4 text-black/60">{p.c}</td>
                   <td className="px-5 py-4 tabular-nums">{p.p === "Inquiry" ? <span className="text-black/45">Inquiry</span> : <>₩ {p.p}</>}</td>

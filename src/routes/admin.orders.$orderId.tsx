@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, ChevronDown, MessageSquare, XCircle, Printer, Copy, Check, Package, CreditCard, Truck, User, MapPin, Clock } from "lucide-react";
+import { ArrowLeft, ChevronDown, MessageSquare, XCircle, Printer, Copy, Check, Package, CreditCard, Truck, User, MapPin, Clock, FileText, Receipt, Download, X, Pencil } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/admin/orders/$orderId")({
@@ -36,15 +36,61 @@ function OrderDetailPage() {
   const [status, setStatus] = useState<Status>("Pending");
   const [menuOpen, setMenuOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [shipEdit, setShipEdit] = useState(false);
+  const [shipping, setShipping] = useState({
+    address: "서울 강남구 청담동 · 123-45",
+    recipient: "김서린",
+    phone: "010-1234-5678",
+    carrier: "CJ Logistics",
+    tracking: "",
+    eta: "",
+  });
+  const [toast, setToast] = useState<string | null>(null);
 
   const subtotal = items.reduce((s, i) => s + i.qty * i.price, 0);
-  const shipping: number = 0;
-  const total = subtotal + shipping;
+  const shippingFee: number = 0;
+  const total = subtotal + shippingFee;
 
   const copy = () => {
     navigator.clipboard.writeText(orderId);
     setCopied(true);
     setTimeout(() => setCopied(false), 1200);
+  };
+
+  const notify = (m: string) => {
+    setToast(m);
+    setTimeout(() => setToast(null), 2000);
+  };
+
+  const downloadDoc = (kind: "invoice" | "receipt") => {
+    const title = kind === "invoice" ? "INVOICE" : "RECEIPT";
+    const lines = [
+      `SERIN ATELIER — ${title}`,
+      `============================================`,
+      `Order #     : ${orderId}`,
+      `Date        : 2024.05.12 14:35`,
+      `Customer    : ${shipping.recipient}`,
+      `Phone       : ${shipping.phone}`,
+      `Ship to     : ${shipping.address}`,
+      ``,
+      `ITEMS`,
+      `--------------------------------------------`,
+      ...items.map((i) => `${i.name.padEnd(30)} ${String(i.qty).padStart(3)} x  ₩${i.price.toLocaleString().padStart(9)}`),
+      `--------------------------------------------`,
+      `Subtotal                             ₩${subtotal.toLocaleString().padStart(9)}`,
+      `Shipping                             ${shippingFee ? `₩${shippingFee.toLocaleString().padStart(9)}` : "     Free"}`,
+      `TOTAL                                ₩${total.toLocaleString().padStart(9)}`,
+      ``,
+      `Thank you for choosing Serin.`,
+    ].join("\n");
+    const blob = new Blob([lines], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${kind}-${orderId}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    notify(`${title.charAt(0) + title.slice(1).toLowerCase()} downloaded`);
   };
 
   return (
@@ -73,8 +119,14 @@ function OrderDetailPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button className="flex h-10 items-center gap-2 rounded-xl border border-black/[0.08] bg-white px-4 text-[12.5px] font-medium hover:bg-black/[0.03]">
+        <div className="flex flex-wrap items-center gap-2">
+          <button onClick={() => downloadDoc("invoice")} className="flex h-10 items-center gap-2 rounded-xl border border-black/[0.08] bg-white px-4 text-[12.5px] font-medium hover:bg-black/[0.03]">
+            <FileText className="h-4 w-4" /> Invoice
+          </button>
+          <button onClick={() => downloadDoc("receipt")} className="flex h-10 items-center gap-2 rounded-xl border border-black/[0.08] bg-white px-4 text-[12.5px] font-medium hover:bg-black/[0.03]">
+            <Receipt className="h-4 w-4" /> Receipt
+          </button>
+          <button onClick={() => window.print()} className="flex h-10 items-center gap-2 rounded-xl border border-black/[0.08] bg-white px-4 text-[12.5px] font-medium hover:bg-black/[0.03]">
             <Printer className="h-4 w-4" /> Print
           </button>
           <div className="relative">
@@ -128,11 +180,20 @@ function OrderDetailPage() {
               <Row k="Email" v="serin_kim@example.com" />
               <Row k="Requests" v="문구는 깔끔하게 부탁드립니다." />
             </Card>
-            <Card icon={MapPin} title="Shipping">
-              <Row k="Address" v="서울 강남구 청담동 · 123-45" />
-              <Row k="Recipient" v="김서린 · 010-1234-5678" />
-              <Row k="Carrier" v="CJ Logistics" />
-              <Row k="Tracking" v="Not yet assigned" />
+            <Card
+              icon={MapPin}
+              title="Shipping"
+              action={
+                <button onClick={() => setShipEdit(true)} className="flex items-center gap-1 rounded-lg border border-black/[0.08] bg-white px-2 py-1 text-[11px] font-medium hover:bg-black/[0.03]">
+                  <Pencil className="h-3 w-3" /> Update
+                </button>
+              }
+            >
+              <Row k="Address" v={shipping.address} />
+              <Row k="Recipient" v={`${shipping.recipient} · ${shipping.phone}`} />
+              <Row k="Carrier" v={shipping.carrier} />
+              <Row k="Tracking" v={shipping.tracking || "Not yet assigned"} />
+              {shipping.eta && <Row k="ETA" v={shipping.eta} />}
             </Card>
           </div>
 
@@ -178,7 +239,7 @@ function OrderDetailPage() {
                 </tr>
                 <tr>
                   <td colSpan={3} className="px-5 py-2.5 text-right text-[12px] text-black/55">Shipping</td>
-                  <td className="px-5 py-2.5 text-right tabular-nums">{shipping ? `₩ ${shipping.toLocaleString()}` : "Free"}</td>
+                  <td className="px-5 py-2.5 text-right tabular-nums">{shippingFee ? `₩ ${shippingFee.toLocaleString()}` : "Free"}</td>
                 </tr>
                 <tr className="border-t border-black/[0.06]">
                   <td colSpan={3} className="px-5 py-3.5 text-right text-[12.5px] font-medium">Total</td>
@@ -189,18 +250,21 @@ function OrderDetailPage() {
           </section>
 
           {/* Actions */}
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <button className="flex h-11 items-center justify-center gap-2 rounded-xl border border-black/[0.08] bg-white text-[12.5px] font-medium hover:bg-black/[0.03]">
               <XCircle className="h-4 w-4" /> Cancel order
             </button>
-            <button className="flex h-11 items-center justify-center gap-2 rounded-xl border border-black/[0.08] bg-white text-[12.5px] font-medium hover:bg-black/[0.03]">
+            <button onClick={() => notify("SMS sent to customer")} className="flex h-11 items-center justify-center gap-2 rounded-xl border border-black/[0.08] bg-white text-[12.5px] font-medium hover:bg-black/[0.03]">
               <MessageSquare className="h-4 w-4" /> Send SMS
+            </button>
+            <button onClick={() => setShipEdit(true)} className="flex h-11 items-center justify-center gap-2 rounded-xl border border-black/[0.08] bg-white text-[12.5px] font-medium hover:bg-black/[0.03]">
+              <Truck className="h-4 w-4" /> Update shipping
             </button>
             <button
               onClick={() => setMenuOpen(true)}
               className="flex h-11 items-center justify-center gap-2 rounded-xl bg-[#1a1410] text-[12.5px] font-medium text-white hover:bg-black"
             >
-              <Truck className="h-4 w-4" /> Change status
+              <Download className="h-4 w-4" /> Change status
             </button>
           </div>
         </div>
@@ -265,18 +329,81 @@ function OrderDetailPage() {
           </section>
         </div>
       </div>
+
+      {/* Shipping modal */}
+      {shipEdit && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setShipEdit(false)}>
+          <div onClick={(e) => e.stopPropagation()} className="w-full max-w-lg animate-scale-in rounded-2xl bg-white p-6 shadow-2xl">
+            <div className="flex items-center justify-between">
+              <h2 className="font-serif text-2xl">Update shipping</h2>
+              <button onClick={() => setShipEdit(false)} className="grid h-9 w-9 place-items-center rounded-lg hover:bg-black/5"><X className="h-4 w-4" /></button>
+            </div>
+            <div className="mt-5 grid gap-4">
+              <label className="block">
+                <span className="text-[11.5px] font-medium tracking-wide text-black/60">Address</span>
+                <input value={shipping.address} onChange={(e) => setShipping({ ...shipping, address: e.target.value })} className="mt-1.5 h-11 w-full rounded-xl border border-black/[0.07] bg-[#faf9f6] px-3.5 text-[13px] focus:border-black/20 focus:bg-white focus:outline-none" />
+              </label>
+              <div className="grid grid-cols-2 gap-4">
+                <label className="block">
+                  <span className="text-[11.5px] font-medium tracking-wide text-black/60">Recipient</span>
+                  <input value={shipping.recipient} onChange={(e) => setShipping({ ...shipping, recipient: e.target.value })} className="mt-1.5 h-11 w-full rounded-xl border border-black/[0.07] bg-[#faf9f6] px-3.5 text-[13px] focus:border-black/20 focus:bg-white focus:outline-none" />
+                </label>
+                <label className="block">
+                  <span className="text-[11.5px] font-medium tracking-wide text-black/60">Phone</span>
+                  <input value={shipping.phone} onChange={(e) => setShipping({ ...shipping, phone: e.target.value })} className="mt-1.5 h-11 w-full rounded-xl border border-black/[0.07] bg-[#faf9f6] px-3.5 text-[13px] focus:border-black/20 focus:bg-white focus:outline-none" />
+                </label>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <label className="block">
+                  <span className="text-[11.5px] font-medium tracking-wide text-black/60">Carrier</span>
+                  <select value={shipping.carrier} onChange={(e) => setShipping({ ...shipping, carrier: e.target.value })} className="mt-1.5 h-11 w-full rounded-xl border border-black/[0.07] bg-[#faf9f6] px-3.5 text-[13px] focus:bg-white focus:outline-none">
+                    <option>CJ Logistics</option><option>Hanjin</option><option>Lotte</option><option>Kakao T Delivery</option><option>DHL Express</option>
+                  </select>
+                </label>
+                <label className="block">
+                  <span className="text-[11.5px] font-medium tracking-wide text-black/60">Tracking #</span>
+                  <input value={shipping.tracking} onChange={(e) => setShipping({ ...shipping, tracking: e.target.value })} placeholder="e.g. 6098-1234-5678" className="mt-1.5 h-11 w-full rounded-xl border border-black/[0.07] bg-[#faf9f6] px-3.5 text-[13px] focus:border-black/20 focus:bg-white focus:outline-none" />
+                </label>
+              </div>
+              <label className="block">
+                <span className="text-[11.5px] font-medium tracking-wide text-black/60">Estimated delivery</span>
+                <input value={shipping.eta} onChange={(e) => setShipping({ ...shipping, eta: e.target.value })} placeholder="e.g. 2024.05.16" className="mt-1.5 h-11 w-full rounded-xl border border-black/[0.07] bg-[#faf9f6] px-3.5 text-[13px] focus:border-black/20 focus:bg-white focus:outline-none" />
+              </label>
+            </div>
+            <div className="mt-6 flex justify-end gap-2">
+              <button onClick={() => setShipEdit(false)} className="h-10 rounded-xl border border-black/[0.08] bg-white px-4 text-[12.5px]">Cancel</button>
+              <button
+                onClick={() => { setShipEdit(false); notify("Shipping updated"); }}
+                className="h-10 rounded-xl bg-gradient-to-br from-[#1a1410] to-[#0b0b0d] px-5 text-[12.5px] font-medium text-white"
+              >
+                Save shipping
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-[60] flex items-center gap-2 rounded-xl bg-[#1a1410] px-4 py-3 text-[12.5px] font-medium text-white shadow-2xl animate-scale-in">
+          <Check className="h-4 w-4 text-emerald-400" /> {toast}
+        </div>
+      )}
     </div>
   );
 }
 
-function Card({ icon: Icon, title, children }: { icon: React.ComponentType<{ className?: string }>; title: string; children: React.ReactNode }) {
+function Card({ icon: Icon, title, action, children }: { icon: React.ComponentType<{ className?: string }>; title: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
     <section className="rounded-2xl border border-black/[0.06] bg-white p-5">
-      <div className="mb-3 flex items-center gap-2">
-        <div className="grid h-7 w-7 place-items-center rounded-lg bg-[#faf5e6] text-[#8b6f3f]">
-          <Icon className="h-3.5 w-3.5" />
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <div className="grid h-7 w-7 place-items-center rounded-lg bg-[#faf5e6] text-[#8b6f3f]">
+            <Icon className="h-3.5 w-3.5" />
+          </div>
+          <h2 className="text-[13px] font-medium tracking-wide">{title}</h2>
         </div>
-        <h2 className="text-[13px] font-medium tracking-wide">{title}</h2>
+        {action}
       </div>
       <dl className="space-y-2">{children}</dl>
     </section>
