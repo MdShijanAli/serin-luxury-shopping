@@ -119,8 +119,14 @@ function OrderDetailPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <button className="flex h-10 items-center gap-2 rounded-xl border border-black/[0.08] bg-white px-4 text-[12.5px] font-medium hover:bg-black/[0.03]">
+        <div className="flex flex-wrap items-center gap-2">
+          <button onClick={() => downloadDoc("invoice")} className="flex h-10 items-center gap-2 rounded-xl border border-black/[0.08] bg-white px-4 text-[12.5px] font-medium hover:bg-black/[0.03]">
+            <FileText className="h-4 w-4" /> Invoice
+          </button>
+          <button onClick={() => downloadDoc("receipt")} className="flex h-10 items-center gap-2 rounded-xl border border-black/[0.08] bg-white px-4 text-[12.5px] font-medium hover:bg-black/[0.03]">
+            <Receipt className="h-4 w-4" /> Receipt
+          </button>
+          <button onClick={() => window.print()} className="flex h-10 items-center gap-2 rounded-xl border border-black/[0.08] bg-white px-4 text-[12.5px] font-medium hover:bg-black/[0.03]">
             <Printer className="h-4 w-4" /> Print
           </button>
           <div className="relative">
