@@ -38,7 +38,7 @@ function OrderDetailPage() {
   const [copied, setCopied] = useState(false);
 
   const subtotal = items.reduce((s, i) => s + i.qty * i.price, 0);
-  const shipping = 0;
+  const shipping: number = 0;
   const total = subtotal + shipping;
 
   const copy = () => {
