@@ -329,6 +329,66 @@ function OrderDetailPage() {
           </section>
         </div>
       </div>
+
+      {/* Shipping modal */}
+      {shipEdit && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 backdrop-blur-sm p-4" onClick={() => setShipEdit(false)}>
+          <div onClick={(e) => e.stopPropagation()} className="w-full max-w-lg animate-scale-in rounded-2xl bg-white p-6 shadow-2xl">
+            <div className="flex items-center justify-between">
+              <h2 className="font-serif text-2xl">Update shipping</h2>
+              <button onClick={() => setShipEdit(false)} className="grid h-9 w-9 place-items-center rounded-lg hover:bg-black/5"><X className="h-4 w-4" /></button>
+            </div>
+            <div className="mt-5 grid gap-4">
+              <label className="block">
+                <span className="text-[11.5px] font-medium tracking-wide text-black/60">Address</span>
+                <input value={shipping.address} onChange={(e) => setShipping({ ...shipping, address: e.target.value })} className="mt-1.5 h-11 w-full rounded-xl border border-black/[0.07] bg-[#faf9f6] px-3.5 text-[13px] focus:border-black/20 focus:bg-white focus:outline-none" />
+              </label>
+              <div className="grid grid-cols-2 gap-4">
+                <label className="block">
+                  <span className="text-[11.5px] font-medium tracking-wide text-black/60">Recipient</span>
+                  <input value={shipping.recipient} onChange={(e) => setShipping({ ...shipping, recipient: e.target.value })} className="mt-1.5 h-11 w-full rounded-xl border border-black/[0.07] bg-[#faf9f6] px-3.5 text-[13px] focus:border-black/20 focus:bg-white focus:outline-none" />
+                </label>
+                <label className="block">
+                  <span className="text-[11.5px] font-medium tracking-wide text-black/60">Phone</span>
+                  <input value={shipping.phone} onChange={(e) => setShipping({ ...shipping, phone: e.target.value })} className="mt-1.5 h-11 w-full rounded-xl border border-black/[0.07] bg-[#faf9f6] px-3.5 text-[13px] focus:border-black/20 focus:bg-white focus:outline-none" />
+                </label>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <label className="block">
+                  <span className="text-[11.5px] font-medium tracking-wide text-black/60">Carrier</span>
+                  <select value={shipping.carrier} onChange={(e) => setShipping({ ...shipping, carrier: e.target.value })} className="mt-1.5 h-11 w-full rounded-xl border border-black/[0.07] bg-[#faf9f6] px-3.5 text-[13px] focus:bg-white focus:outline-none">
+                    <option>CJ Logistics</option><option>Hanjin</option><option>Lotte</option><option>Kakao T Delivery</option><option>DHL Express</option>
+                  </select>
+                </label>
+                <label className="block">
+                  <span className="text-[11.5px] font-medium tracking-wide text-black/60">Tracking #</span>
+                  <input value={shipping.tracking} onChange={(e) => setShipping({ ...shipping, tracking: e.target.value })} placeholder="e.g. 6098-1234-5678" className="mt-1.5 h-11 w-full rounded-xl border border-black/[0.07] bg-[#faf9f6] px-3.5 text-[13px] focus:border-black/20 focus:bg-white focus:outline-none" />
+                </label>
+              </div>
+              <label className="block">
+                <span className="text-[11.5px] font-medium tracking-wide text-black/60">Estimated delivery</span>
+                <input value={shipping.eta} onChange={(e) => setShipping({ ...shipping, eta: e.target.value })} placeholder="e.g. 2024.05.16" className="mt-1.5 h-11 w-full rounded-xl border border-black/[0.07] bg-[#faf9f6] px-3.5 text-[13px] focus:border-black/20 focus:bg-white focus:outline-none" />
+              </label>
+            </div>
+            <div className="mt-6 flex justify-end gap-2">
+              <button onClick={() => setShipEdit(false)} className="h-10 rounded-xl border border-black/[0.08] bg-white px-4 text-[12.5px]">Cancel</button>
+              <button
+                onClick={() => { setShipEdit(false); notify("Shipping updated"); }}
+                className="h-10 rounded-xl bg-gradient-to-br from-[#1a1410] to-[#0b0b0d] px-5 text-[12.5px] font-medium text-white"
+              >
+                Save shipping
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-[60] flex items-center gap-2 rounded-xl bg-[#1a1410] px-4 py-3 text-[12.5px] font-medium text-white shadow-2xl animate-scale-in">
+          <Check className="h-4 w-4 text-emerald-400" /> {toast}
+        </div>
+      )}
     </div>
   );
 }
