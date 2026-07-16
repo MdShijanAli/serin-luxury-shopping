@@ -152,12 +152,20 @@ function CouponsPage() {
           <h1 className="mt-1 font-serif text-3xl">Coupon Management</h1>
           <p className="mt-1 text-[13px] text-black/55">Create, schedule and monitor discount codes for the atelier.</p>
         </div>
-        <button
-          onClick={openNew}
-          className="inline-flex h-11 items-center gap-2 rounded-xl bg-gradient-to-br from-[#1a1410] to-[#0b0b0d] px-4 text-[12.5px] font-medium text-white shadow-[0_8px_24px_-10px_rgba(0,0,0,0.4)] transition-transform hover:-translate-y-0.5"
-        >
-          <Plus className="h-4 w-4" strokeWidth={2} /> New Coupon
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setValidatorOpen(true)}
+            className="inline-flex h-11 items-center gap-2 rounded-xl border border-black/[0.08] bg-white px-4 text-[12.5px] font-medium text-black/75 hover:bg-black/[0.04]"
+          >
+            <FlaskConical className="h-4 w-4" strokeWidth={1.8} /> Test Coupon
+          </button>
+          <button
+            onClick={openNew}
+            className="inline-flex h-11 items-center gap-2 rounded-xl bg-gradient-to-br from-[#1a1410] to-[#0b0b0d] px-4 text-[12.5px] font-medium text-white shadow-[0_8px_24px_-10px_rgba(0,0,0,0.4)] transition-transform hover:-translate-y-0.5"
+          >
+            <Plus className="h-4 w-4" strokeWidth={2} /> New Coupon
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
