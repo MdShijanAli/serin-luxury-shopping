@@ -37,6 +37,7 @@ const items: Item[] = [
   },
   { label: "Products", to: "/admin/products", icon: Package },
   { label: "Customers", to: "/admin/customers", icon: Users },
+  { label: "Coupons", to: "/admin/coupons", icon: TicketPercent },
   { label: "Admins", to: "/admin/accounts", icon: UserCog },
   { label: "Settings", to: "/admin/settings", icon: Settings },
 ];
