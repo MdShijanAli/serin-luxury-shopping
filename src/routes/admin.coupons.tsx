@@ -261,8 +261,13 @@ function CouponsPage() {
                       {c.minOrder > 0 ? `${c.minOrder.toLocaleString()} KRW` : "None"}
                     </td>
                     <td className="px-5 py-4">
-                      <div className="min-w-[110px]">
-                        <p className="tabular-nums text-black/70">
+                      <Link
+                        to="/admin/coupons/$couponId"
+                        params={{ couponId: c.id }}
+                        title="View redemption details"
+                        className="block min-w-[110px] rounded-lg -m-1 p-1 transition-colors hover:bg-[#faf6ec]"
+                      >
+                        <p className="tabular-nums text-black/70 group-hover:text-black">
                           {c.used.toLocaleString()} / {c.usageLimit > 0 ? c.usageLimit.toLocaleString() : "∞"}
                         </p>
                         {c.usageLimit > 0 && (
@@ -270,7 +275,7 @@ function CouponsPage() {
                             <div className="h-full bg-gradient-to-r from-[#e6cf9e] to-[#a17f43]" style={{ width: `${pct}%` }} />
                           </div>
                         )}
-                      </div>
+                      </Link>
                     </td>
                     <td className="px-5 py-4 tabular-nums text-black/60">
                       <span className="whitespace-nowrap">{c.startsAt}</span>
