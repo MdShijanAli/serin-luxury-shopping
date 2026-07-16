@@ -38,6 +38,7 @@ import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
 import { Route as AdminProductsProductIdRouteImport } from './routes/admin.products.$productId'
 import { Route as AdminOrdersOrderIdRouteImport } from './routes/admin.orders.$orderId'
 import { Route as AdminCustomersCustomerIdRouteImport } from './routes/admin.customers.$customerId'
+import { Route as AdminCouponsCouponIdRouteImport } from './routes/admin.coupons.$couponId'
 
 const ShowroomRoute = ShowroomRouteImport.update({
   id: '/showroom',
@@ -185,6 +186,11 @@ const AdminCustomersCustomerIdRoute =
     path: '/$customerId',
     getParentRoute: () => AdminCustomersRoute,
   } as any)
+const AdminCouponsCouponIdRoute = AdminCouponsCouponIdRouteImport.update({
+  id: '/$couponId',
+  path: '/$couponId',
+  getParentRoute: () => AdminCouponsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -205,7 +211,7 @@ export interface FileRoutesByFullPath {
   '/showroom': typeof ShowroomRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/activity': typeof AdminActivityRoute
-  '/admin/coupons': typeof AdminCouponsRoute
+  '/admin/coupons': typeof AdminCouponsRouteWithChildren
   '/admin/customers': typeof AdminCustomersRouteWithChildren
   '/admin/orders': typeof AdminOrdersRouteWithChildren
   '/admin/preferences': typeof AdminPreferencesRoute
@@ -213,6 +219,7 @@ export interface FileRoutesByFullPath {
   '/admin/profile': typeof AdminProfileRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/coupons/$couponId': typeof AdminCouponsCouponIdRoute
   '/admin/customers/$customerId': typeof AdminCustomersCustomerIdRoute
   '/admin/orders/$orderId': typeof AdminOrdersOrderIdRoute
   '/admin/products/$productId': typeof AdminProductsProductIdRoute
@@ -235,7 +242,7 @@ export interface FileRoutesByTo {
   '/showroom': typeof ShowroomRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/activity': typeof AdminActivityRoute
-  '/admin/coupons': typeof AdminCouponsRoute
+  '/admin/coupons': typeof AdminCouponsRouteWithChildren
   '/admin/customers': typeof AdminCustomersRouteWithChildren
   '/admin/orders': typeof AdminOrdersRouteWithChildren
   '/admin/preferences': typeof AdminPreferencesRoute
@@ -243,6 +250,7 @@ export interface FileRoutesByTo {
   '/admin/profile': typeof AdminProfileRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/coupons/$couponId': typeof AdminCouponsCouponIdRoute
   '/admin/customers/$customerId': typeof AdminCustomersCustomerIdRoute
   '/admin/orders/$orderId': typeof AdminOrdersOrderIdRoute
   '/admin/products/$productId': typeof AdminProductsProductIdRoute
@@ -267,7 +275,7 @@ export interface FileRoutesById {
   '/showroom': typeof ShowroomRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/activity': typeof AdminActivityRoute
-  '/admin/coupons': typeof AdminCouponsRoute
+  '/admin/coupons': typeof AdminCouponsRouteWithChildren
   '/admin/customers': typeof AdminCustomersRouteWithChildren
   '/admin/orders': typeof AdminOrdersRouteWithChildren
   '/admin/preferences': typeof AdminPreferencesRoute
@@ -275,6 +283,7 @@ export interface FileRoutesById {
   '/admin/profile': typeof AdminProfileRoute
   '/admin/settings': typeof AdminSettingsRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/coupons/$couponId': typeof AdminCouponsCouponIdRoute
   '/admin/customers/$customerId': typeof AdminCustomersCustomerIdRoute
   '/admin/orders/$orderId': typeof AdminOrdersOrderIdRoute
   '/admin/products/$productId': typeof AdminProductsProductIdRoute
@@ -308,6 +317,7 @@ export interface FileRouteTypes {
     | '/admin/profile'
     | '/admin/settings'
     | '/admin/'
+    | '/admin/coupons/$couponId'
     | '/admin/customers/$customerId'
     | '/admin/orders/$orderId'
     | '/admin/products/$productId'
@@ -338,6 +348,7 @@ export interface FileRouteTypes {
     | '/admin/profile'
     | '/admin/settings'
     | '/admin'
+    | '/admin/coupons/$couponId'
     | '/admin/customers/$customerId'
     | '/admin/orders/$orderId'
     | '/admin/products/$productId'
@@ -369,6 +380,7 @@ export interface FileRouteTypes {
     | '/admin/profile'
     | '/admin/settings'
     | '/admin/'
+    | '/admin/coupons/$couponId'
     | '/admin/customers/$customerId'
     | '/admin/orders/$orderId'
     | '/admin/products/$productId'
@@ -598,8 +610,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCustomersCustomerIdRouteImport
       parentRoute: typeof AdminCustomersRoute
     }
+    '/admin/coupons/$couponId': {
+      id: '/admin/coupons/$couponId'
+      path: '/$couponId'
+      fullPath: '/admin/coupons/$couponId'
+      preLoaderRoute: typeof AdminCouponsCouponIdRouteImport
+      parentRoute: typeof AdminCouponsRoute
+    }
   }
 }
+
+interface AdminCouponsRouteChildren {
+  AdminCouponsCouponIdRoute: typeof AdminCouponsCouponIdRoute
+}
+
+const AdminCouponsRouteChildren: AdminCouponsRouteChildren = {
+  AdminCouponsCouponIdRoute: AdminCouponsCouponIdRoute,
+}
+
+const AdminCouponsRouteWithChildren = AdminCouponsRoute._addFileChildren(
+  AdminCouponsRouteChildren,
+)
 
 interface AdminCustomersRouteChildren {
   AdminCustomersCustomerIdRoute: typeof AdminCustomersCustomerIdRoute
@@ -640,7 +671,7 @@ const AdminProductsRouteWithChildren = AdminProductsRoute._addFileChildren(
 interface AdminRouteChildren {
   AdminAccountsRoute: typeof AdminAccountsRoute
   AdminActivityRoute: typeof AdminActivityRoute
-  AdminCouponsRoute: typeof AdminCouponsRoute
+  AdminCouponsRoute: typeof AdminCouponsRouteWithChildren
   AdminCustomersRoute: typeof AdminCustomersRouteWithChildren
   AdminOrdersRoute: typeof AdminOrdersRouteWithChildren
   AdminPreferencesRoute: typeof AdminPreferencesRoute
@@ -653,7 +684,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAccountsRoute: AdminAccountsRoute,
   AdminActivityRoute: AdminActivityRoute,
-  AdminCouponsRoute: AdminCouponsRoute,
+  AdminCouponsRoute: AdminCouponsRouteWithChildren,
   AdminCustomersRoute: AdminCustomersRouteWithChildren,
   AdminOrdersRoute: AdminOrdersRouteWithChildren,
   AdminPreferencesRoute: AdminPreferencesRoute,
