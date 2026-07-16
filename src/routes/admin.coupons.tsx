@@ -56,6 +56,10 @@ function CouponsPage() {
   const [confirmDelete, setConfirmDelete] = useState<Coupon | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [validatorOpen, setValidatorOpen] = useState(false);
+  const [testCode, setTestCode] = useState("");
+  const [testAmount, setTestAmount] = useState<number>(500000);
+  const [testDate, setTestDate] = useState<string>(today());
 
   useEffect(() => {
     try {
