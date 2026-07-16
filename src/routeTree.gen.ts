@@ -32,6 +32,7 @@ import { Route as AdminProductsRouteImport } from './routes/admin.products'
 import { Route as AdminPreferencesRouteImport } from './routes/admin.preferences'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
+import { Route as AdminCouponsRouteImport } from './routes/admin.coupons'
 import { Route as AdminActivityRouteImport } from './routes/admin.activity'
 import { Route as AdminAccountsRouteImport } from './routes/admin.accounts'
 import { Route as AdminProductsProductIdRouteImport } from './routes/admin.products.$productId'
@@ -153,6 +154,11 @@ const AdminCustomersRoute = AdminCustomersRouteImport.update({
   path: '/customers',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminCouponsRoute = AdminCouponsRouteImport.update({
+  id: '/coupons',
+  path: '/coupons',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminActivityRoute = AdminActivityRouteImport.update({
   id: '/activity',
   path: '/activity',
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/showroom': typeof ShowroomRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/activity': typeof AdminActivityRoute
+  '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRouteWithChildren
   '/admin/orders': typeof AdminOrdersRouteWithChildren
   '/admin/preferences': typeof AdminPreferencesRoute
@@ -228,6 +235,7 @@ export interface FileRoutesByTo {
   '/showroom': typeof ShowroomRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/activity': typeof AdminActivityRoute
+  '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRouteWithChildren
   '/admin/orders': typeof AdminOrdersRouteWithChildren
   '/admin/preferences': typeof AdminPreferencesRoute
@@ -259,6 +267,7 @@ export interface FileRoutesById {
   '/showroom': typeof ShowroomRoute
   '/admin/accounts': typeof AdminAccountsRoute
   '/admin/activity': typeof AdminActivityRoute
+  '/admin/coupons': typeof AdminCouponsRoute
   '/admin/customers': typeof AdminCustomersRouteWithChildren
   '/admin/orders': typeof AdminOrdersRouteWithChildren
   '/admin/preferences': typeof AdminPreferencesRoute
@@ -291,6 +300,7 @@ export interface FileRouteTypes {
     | '/showroom'
     | '/admin/accounts'
     | '/admin/activity'
+    | '/admin/coupons'
     | '/admin/customers'
     | '/admin/orders'
     | '/admin/preferences'
@@ -320,6 +330,7 @@ export interface FileRouteTypes {
     | '/showroom'
     | '/admin/accounts'
     | '/admin/activity'
+    | '/admin/coupons'
     | '/admin/customers'
     | '/admin/orders'
     | '/admin/preferences'
@@ -350,6 +361,7 @@ export interface FileRouteTypes {
     | '/showroom'
     | '/admin/accounts'
     | '/admin/activity'
+    | '/admin/coupons'
     | '/admin/customers'
     | '/admin/orders'
     | '/admin/preferences'
@@ -544,6 +556,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCustomersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/coupons': {
+      id: '/admin/coupons'
+      path: '/coupons'
+      fullPath: '/admin/coupons'
+      preLoaderRoute: typeof AdminCouponsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/activity': {
       id: '/admin/activity'
       path: '/activity'
@@ -621,6 +640,7 @@ const AdminProductsRouteWithChildren = AdminProductsRoute._addFileChildren(
 interface AdminRouteChildren {
   AdminAccountsRoute: typeof AdminAccountsRoute
   AdminActivityRoute: typeof AdminActivityRoute
+  AdminCouponsRoute: typeof AdminCouponsRoute
   AdminCustomersRoute: typeof AdminCustomersRouteWithChildren
   AdminOrdersRoute: typeof AdminOrdersRouteWithChildren
   AdminPreferencesRoute: typeof AdminPreferencesRoute
@@ -633,6 +653,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminAccountsRoute: AdminAccountsRoute,
   AdminActivityRoute: AdminActivityRoute,
+  AdminCouponsRoute: AdminCouponsRoute,
   AdminCustomersRoute: AdminCustomersRouteWithChildren,
   AdminOrdersRoute: AdminOrdersRouteWithChildren,
   AdminPreferencesRoute: AdminPreferencesRoute,
@@ -665,13 +686,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

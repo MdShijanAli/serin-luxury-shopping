@@ -9,7 +9,9 @@ import {
   ChevronDown,
   Sparkles,
   X,
+  TicketPercent,
 } from "lucide-react";
+
 import { useState } from "react";
 import { useAdminSidebar } from "./SidebarContext";
 
