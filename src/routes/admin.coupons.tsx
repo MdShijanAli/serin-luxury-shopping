@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Plus, Search, Pencil, Trash2, X, Copy, Check, Tag, Calendar, Percent, TicketPercent } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Plus, Search, Pencil, Trash2, X, Copy, Check, Tag, Calendar, Percent, TicketPercent, FlaskConical, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 export const Route = createFileRoute("/admin/coupons")({
@@ -56,6 +56,10 @@ function CouponsPage() {
   const [confirmDelete, setConfirmDelete] = useState<Coupon | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [validatorOpen, setValidatorOpen] = useState(false);
+  const [testCode, setTestCode] = useState("");
+  const [testAmount, setTestAmount] = useState<number>(500000);
+  const [testDate, setTestDate] = useState<string>(today());
 
   useEffect(() => {
     try {
@@ -148,12 +152,20 @@ function CouponsPage() {
           <h1 className="mt-1 font-serif text-3xl">Coupon Management</h1>
           <p className="mt-1 text-[13px] text-black/55">Create, schedule and monitor discount codes for the atelier.</p>
         </div>
-        <button
-          onClick={openNew}
-          className="inline-flex h-11 items-center gap-2 rounded-xl bg-gradient-to-br from-[#1a1410] to-[#0b0b0d] px-4 text-[12.5px] font-medium text-white shadow-[0_8px_24px_-10px_rgba(0,0,0,0.4)] transition-transform hover:-translate-y-0.5"
-        >
-          <Plus className="h-4 w-4" strokeWidth={2} /> New Coupon
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setValidatorOpen(true)}
+            className="inline-flex h-11 items-center gap-2 rounded-xl border border-black/[0.08] bg-white px-4 text-[12.5px] font-medium text-black/75 hover:bg-black/[0.04]"
+          >
+            <FlaskConical className="h-4 w-4" strokeWidth={1.8} /> Test Coupon
+          </button>
+          <button
+            onClick={openNew}
+            className="inline-flex h-11 items-center gap-2 rounded-xl bg-gradient-to-br from-[#1a1410] to-[#0b0b0d] px-4 text-[12.5px] font-medium text-white shadow-[0_8px_24px_-10px_rgba(0,0,0,0.4)] transition-transform hover:-translate-y-0.5"
+          >
+            <Plus className="h-4 w-4" strokeWidth={2} /> New Coupon
+          </button>
+        </div>
       </div>
 
       {/* Stats */}
@@ -249,8 +261,13 @@ function CouponsPage() {
                       {c.minOrder > 0 ? `${c.minOrder.toLocaleString()} KRW` : "None"}
                     </td>
                     <td className="px-5 py-4">
-                      <div className="min-w-[110px]">
-                        <p className="tabular-nums text-black/70">
+                      <Link
+                        to="/admin/coupons/$couponId"
+                        params={{ couponId: c.id }}
+                        title="View redemption details"
+                        className="block min-w-[110px] rounded-lg -m-1 p-1 transition-colors hover:bg-[#faf6ec]"
+                      >
+                        <p className="tabular-nums text-black/70 group-hover:text-black">
                           {c.used.toLocaleString()} / {c.usageLimit > 0 ? c.usageLimit.toLocaleString() : "∞"}
                         </p>
                         {c.usageLimit > 0 && (
@@ -258,7 +275,7 @@ function CouponsPage() {
                             <div className="h-full bg-gradient-to-r from-[#e6cf9e] to-[#a17f43]" style={{ width: `${pct}%` }} />
                           </div>
                         )}
-                      </div>
+                      </Link>
                     </td>
                     <td className="px-5 py-4 tabular-nums text-black/60">
                       <span className="whitespace-nowrap">{c.startsAt}</span>
@@ -446,6 +463,20 @@ function CouponsPage() {
         </div>
       )}
 
+      {/* Validator */}
+      {validatorOpen && (
+        <ValidatorModal
+          items={items}
+          initialCode={testCode}
+          initialAmount={testAmount}
+          initialDate={testDate}
+          onCodeChange={setTestCode}
+          onAmountChange={setTestAmount}
+          onDateChange={setTestDate}
+          onClose={() => setValidatorOpen(false)}
+        />
+      )}
+
       {/* Toast */}
       {toast && (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-xl bg-[#1a1410] px-4 py-2.5 text-[12.5px] text-white shadow-lg">
@@ -461,6 +492,197 @@ function Field({ label, full, children }: { label: string; full?: boolean; child
     <div className={full ? "md:col-span-2" : ""}>
       <label className="mb-1.5 block text-[11px] font-medium uppercase tracking-wider text-black/50">{label}</label>
       {children}
+    </div>
+  );
+}
+
+function ValidatorModal({
+  items,
+  initialCode,
+  initialAmount,
+  initialDate,
+  onCodeChange,
+  onAmountChange,
+  onDateChange,
+  onClose,
+}: {
+  items: Coupon[];
+  initialCode: string;
+  initialAmount: number;
+  initialDate: string;
+  onCodeChange: (v: string) => void;
+  onAmountChange: (v: number) => void;
+  onDateChange: (v: string) => void;
+  onClose: () => void;
+}) {
+  const [code, setCode] = useState(initialCode);
+  const [amount, setAmount] = useState<number>(initialAmount);
+  const [date, setDate] = useState<string>(initialDate);
+
+  const result = useMemo(() => {
+    const trimmed = code.trim().toUpperCase();
+    if (!trimmed) return null;
+    const match = items.find((c) => c.code === trimmed);
+    if (!match) {
+      return {
+        ok: false as const,
+        title: "Code not found",
+        detail: `No coupon exists with the code "${trimmed}".`,
+        checks: [] as { label: string; ok: boolean; note?: string }[],
+      };
+    }
+    const checks: { label: string; ok: boolean; note?: string }[] = [
+      { label: "Coupon is active", ok: match.active, note: match.active ? "Enabled" : "Marked inactive" },
+      {
+        label: "Within date range",
+        ok: date >= match.startsAt && date <= match.endsAt,
+        note: `${match.startsAt} → ${match.endsAt}`,
+      },
+      {
+        label: "Meets minimum order",
+        ok: amount >= match.minOrder,
+        note:
+          match.minOrder > 0
+            ? `Requires ${match.minOrder.toLocaleString()} KRW`
+            : "No minimum",
+      },
+      {
+        label: "Usage limit available",
+        ok: match.usageLimit === 0 || match.used < match.usageLimit,
+        note:
+          match.usageLimit === 0
+            ? "Unlimited"
+            : `${match.used.toLocaleString()} / ${match.usageLimit.toLocaleString()} used`,
+      },
+    ];
+    const allOk = checks.every((c) => c.ok);
+    const discount = allOk
+      ? match.type === "percent"
+        ? Math.round((amount * match.value) / 100)
+        : Math.min(amount, match.value)
+      : 0;
+    return {
+      ok: allOk,
+      match,
+      discount,
+      finalTotal: Math.max(0, amount - discount),
+      title: allOk ? "Eligible" : "Not eligible",
+      detail: allOk
+        ? `Customer would save ${discount.toLocaleString()} KRW on this order.`
+        : "One or more requirements are not met.",
+      checks,
+    };
+  }, [code, amount, date, items]);
+
+  const handleCode = (v: string) => { setCode(v); onCodeChange(v); };
+  const handleAmount = (v: number) => { setAmount(v); onAmountChange(v); };
+  const handleDate = (v: string) => { setDate(v); onDateChange(v); };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl">
+        <div className="flex items-center justify-between border-b border-black/[0.06] px-6 py-4">
+          <div>
+            <p className="text-[11px] tracking-[0.24em] text-black/45">VALIDATOR</p>
+            <h2 className="mt-0.5 font-serif text-xl">Test a coupon code</h2>
+          </div>
+          <button onClick={onClose} className="rounded-lg p-2 hover:bg-black/[0.05]">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 p-6 md:grid-cols-2">
+          <div className="md:col-span-2">
+            <label className="mb-1.5 block text-[11px] font-medium uppercase tracking-wider text-black/50">Coupon code</label>
+            <input
+              value={code}
+              onChange={(e) => handleCode(e.target.value.toUpperCase())}
+              placeholder="e.g. WELCOME10"
+              className="h-11 w-full rounded-xl border border-black/[0.08] bg-white px-3 font-mono text-sm uppercase tracking-wider focus:border-black/25 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-[11px] font-medium uppercase tracking-wider text-black/50">Order total (KRW)</label>
+            <input
+              type="number"
+              min={0}
+              value={amount}
+              onChange={(e) => handleAmount(Number(e.target.value))}
+              className="h-11 w-full rounded-xl border border-black/[0.08] bg-white px-3 text-sm tabular-nums focus:border-black/25 focus:outline-none"
+            />
+          </div>
+          <div>
+            <label className="mb-1.5 block text-[11px] font-medium uppercase tracking-wider text-black/50">Redemption date</label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => handleDate(e.target.value)}
+              className="h-11 w-full rounded-xl border border-black/[0.08] bg-white px-3 text-sm focus:border-black/25 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        {result && (
+          <div className="border-t border-black/[0.06] bg-[#faf9f6] px-6 py-5">
+            <div className="flex items-start gap-3">
+              {result.ok ? (
+                <CheckCircle2 className="h-6 w-6 flex-shrink-0 text-emerald-600" strokeWidth={1.8} />
+              ) : result.checks.length === 0 ? (
+                <AlertCircle className="h-6 w-6 flex-shrink-0 text-amber-600" strokeWidth={1.8} />
+              ) : (
+                <XCircle className="h-6 w-6 flex-shrink-0 text-rose-600" strokeWidth={1.8} />
+              )}
+              <div className="flex-1">
+                <p className={`font-serif text-lg ${result.ok ? "text-emerald-700" : result.checks.length === 0 ? "text-amber-700" : "text-rose-700"}`}>
+                  {result.title}
+                </p>
+                <p className="mt-0.5 text-[12.5px] text-black/60">{result.detail}</p>
+              </div>
+            </div>
+
+            {result.checks.length > 0 && (
+              <ul className="mt-4 space-y-2">
+                {result.checks.map((c) => (
+                  <li key={c.label} className="flex items-center justify-between rounded-lg bg-white px-3 py-2 ring-1 ring-black/[0.05]">
+                    <div className="flex items-center gap-2">
+                      {c.ok ? (
+                        <Check className="h-3.5 w-3.5 text-emerald-600" />
+                      ) : (
+                        <X className="h-3.5 w-3.5 text-rose-600" />
+                      )}
+                      <span className="text-[12.5px] text-black/75">{c.label}</span>
+                    </div>
+                    {c.note && <span className="text-[11.5px] tabular-nums text-black/45">{c.note}</span>}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {result.ok && "match" in result && (
+              <div className="mt-4 rounded-xl border border-emerald-200/60 bg-emerald-50/60 p-4">
+                <div className="flex items-center justify-between text-[12.5px]">
+                  <span className="text-black/60">Order subtotal</span>
+                  <span className="tabular-nums font-medium">{amount.toLocaleString()} KRW</span>
+                </div>
+                <div className="mt-1 flex items-center justify-between text-[12.5px]">
+                  <span className="text-black/60">Discount ({result.match.type === "percent" ? `${result.match.value}%` : "fixed"})</span>
+                  <span className="tabular-nums font-medium text-emerald-700">− {result.discount.toLocaleString()} KRW</span>
+                </div>
+                <div className="mt-2 flex items-center justify-between border-t border-emerald-200/60 pt-2">
+                  <span className="text-[12.5px] font-medium text-black/75">Final total</span>
+                  <span className="font-serif text-xl tabular-nums text-black">{result.finalTotal.toLocaleString()} KRW</span>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="flex items-center justify-end gap-2 border-t border-black/[0.06] bg-white px-6 py-4">
+          <button onClick={onClose} className="h-10 rounded-xl bg-gradient-to-br from-[#1a1410] to-[#0b0b0d] px-5 text-[13px] font-medium text-white hover:opacity-95">
+            Done
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
