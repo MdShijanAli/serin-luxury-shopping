@@ -463,6 +463,20 @@ function CouponsPage() {
         </div>
       )}
 
+      {/* Validator */}
+      {validatorOpen && (
+        <ValidatorModal
+          items={items}
+          initialCode={testCode}
+          initialAmount={testAmount}
+          initialDate={testDate}
+          onCodeChange={setTestCode}
+          onAmountChange={setTestAmount}
+          onDateChange={setTestDate}
+          onClose={() => setValidatorOpen(false)}
+        />
+      )}
+
       {/* Toast */}
       {toast && (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-xl bg-[#1a1410] px-4 py-2.5 text-[12.5px] text-white shadow-lg">
