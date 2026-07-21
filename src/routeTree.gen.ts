@@ -18,6 +18,7 @@ import { Route as HeritageRouteImport } from './routes/heritage'
 import { Route as GoldSilverTradingRouteImport } from './routes/gold-silver-trading'
 import { Route as CustomizeYourStoryRouteImport } from './routes/customize-your-story'
 import { Route as CustomCollectionRouteImport } from './routes/custom-collection'
+import { Route as Contact2RouteImport } from './routes/contact-2'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CheckoutShowroomRouteImport } from './routes/checkout-showroom'
 import { Route as CheckoutRouteImport } from './routes/checkout'
@@ -83,6 +84,11 @@ const CustomizeYourStoryRoute = CustomizeYourStoryRouteImport.update({
 const CustomCollectionRoute = CustomCollectionRouteImport.update({
   id: '/custom-collection',
   path: '/custom-collection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Contact2Route = Contact2RouteImport.update({
+  id: '/contact-2',
+  path: '/contact-2',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -200,6 +206,7 @@ export interface FileRoutesByFullPath {
   '/checkout': typeof CheckoutRoute
   '/checkout-showroom': typeof CheckoutShowroomRoute
   '/contact': typeof ContactRoute
+  '/contact-2': typeof Contact2Route
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
   '/gold-silver-trading': typeof GoldSilverTradingRoute
@@ -231,6 +238,7 @@ export interface FileRoutesByTo {
   '/checkout': typeof CheckoutRoute
   '/checkout-showroom': typeof CheckoutShowroomRoute
   '/contact': typeof ContactRoute
+  '/contact-2': typeof Contact2Route
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
   '/gold-silver-trading': typeof GoldSilverTradingRoute
@@ -264,6 +272,7 @@ export interface FileRoutesById {
   '/checkout': typeof CheckoutRoute
   '/checkout-showroom': typeof CheckoutShowroomRoute
   '/contact': typeof ContactRoute
+  '/contact-2': typeof Contact2Route
   '/custom-collection': typeof CustomCollectionRoute
   '/customize-your-story': typeof CustomizeYourStoryRoute
   '/gold-silver-trading': typeof GoldSilverTradingRoute
@@ -298,6 +307,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/checkout-showroom'
     | '/contact'
+    | '/contact-2'
     | '/custom-collection'
     | '/customize-your-story'
     | '/gold-silver-trading'
@@ -329,6 +339,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/checkout-showroom'
     | '/contact'
+    | '/contact-2'
     | '/custom-collection'
     | '/customize-your-story'
     | '/gold-silver-trading'
@@ -361,6 +372,7 @@ export interface FileRouteTypes {
     | '/checkout'
     | '/checkout-showroom'
     | '/contact'
+    | '/contact-2'
     | '/custom-collection'
     | '/customize-your-story'
     | '/gold-silver-trading'
@@ -394,6 +406,7 @@ export interface RootRouteChildren {
   CheckoutRoute: typeof CheckoutRoute
   CheckoutShowroomRoute: typeof CheckoutShowroomRoute
   ContactRoute: typeof ContactRoute
+  Contact2Route: typeof Contact2Route
   CustomCollectionRoute: typeof CustomCollectionRoute
   CustomizeYourStoryRoute: typeof CustomizeYourStoryRoute
   GoldSilverTradingRoute: typeof GoldSilverTradingRoute
@@ -468,6 +481,13 @@ declare module '@tanstack/react-router' {
       path: '/custom-collection'
       fullPath: '/custom-collection'
       preLoaderRoute: typeof CustomCollectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact-2': {
+      id: '/contact-2'
+      path: '/contact-2'
+      fullPath: '/contact-2'
+      preLoaderRoute: typeof Contact2RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -704,6 +724,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutRoute: CheckoutRoute,
   CheckoutShowroomRoute: CheckoutShowroomRoute,
   ContactRoute: ContactRoute,
+  Contact2Route: Contact2Route,
   CustomCollectionRoute: CustomCollectionRoute,
   CustomizeYourStoryRoute: CustomizeYourStoryRoute,
   GoldSilverTradingRoute: GoldSilverTradingRoute,
@@ -717,13 +738,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
